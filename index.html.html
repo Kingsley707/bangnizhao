@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮你找 - 企业服务搜索平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* 导航栏 */
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+        
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        
+        /* 主页搜索区域 */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+            background-color: #1d4ed8;
+        }
+        
+        /* 服务分类 */
+        .categories {
+            padding: 3rem 0;
+            background-color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category-card {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .category-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* 服务商列表 */
+        .providers {
+            padding: 3rem 0;
+            display: none;
+        }
+        
+        .provider-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .provider-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }
+        
+        .provider-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .provider-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .provider-service {
+            color: #2563eb;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .provider-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .provider-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .provider-location {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .contact-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background-color: #059669;
+        }
+        
+        /* 需求表单 */
+        .demand-form {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 2rem auto;
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1d4ed8;
+        }
+        
+        /* 底部 */
+        footer {
+            background-color: #1f2937;
+            color: #9ca3af;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .category-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            
+            .category-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="container">
+            <div class="logo">帮你找</div>
+            <div class="nav-links">
+                <a href="#" onclick="showSection('home')">首页</a>
+                <a href="#" onclick="showSection('providers')">找服务</a>
+                <a href="#" onclick="showDemandForm()">发布需求</a>
+                <a href="#" class="btn-primary" onclick="showJoinModal()">服务商入驻</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主页搜索 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>找企业服务，就是这么简单</h1>
+            <p>营销推广、设计制作、IT开发、财税法务，一搜就到</p>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="搜索您需要的服务，如：品牌营销、UI设计..." id="searchInput">
+                <button class="search-btn" onclick="searchServices()">搜索服务</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 服务分类 -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">热门服务分类</h2>
+            <div class="category-grid">
+                <div class="category-card" onclick="showProviders('营销推广')">
+                    <div class="category-icon">📢</div>
+                    <div class="category-name">营销推广</div>
+                    <div class="category-count">236家服务商</div>
+                </div>
+                <div class="category-card" onclick="showProviders('设计服务')">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-name">设计服务</div>
+                    <div class="category-count">189家服务商</div>
+                </div>
+                <div class="category-card" onclick="showProviders('IT开发')">
+                    <div class="category-icon">💻</div>
+                    <div class="category-name">IT开发</div>
+                    <div class="category-count">312家服务商</div>
+                </div>
+                <div class="category-card" onclick="showProviders('财税服务')">
+                    <div class="category-icon">📊</div>
+                    <div class="category-name">财税服务</div>
+                    <div class="category-count">156家服务商</div>
+                </div>
+                <div class="category-card" onclick="showProviders('法律服务')">
+                    <div class="category-icon">⚖️</div>
+                    <div class="category-name">法律服务</div>
+                    <div class="category-count">98家服务商</div>
+                </div>
+                <div class="category-card" onclick="showProviders('人力资源')">
+                    <div class="category-icon">👥</div>
+                    <div class="category-name">人力资源</div>
+                    <div class="category-count">134家服务商</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 服务商列表 -->
+    <section class="providers" id="providers">
+        <div class="container">
+            <h2 class="section-title" id="providerTitle">营销推广服务商</h2>
+            <div class="provider-list" id="providerList">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- 需求表单 -->
+    <div class="demand-form" id="demandForm">
+        <h2 style="margin-bottom: 1.5rem;">发布您的需求</h2>
+        <form onsubmit="submitDemand(event)">
+            <div class="form-group">
+                <label>服务类型</label>
+                <select required>
+                    <option value="">请选择服务类型</option>
+                    <option>营销推广</option>
+                    <option>设计服务</option>
+                    <option>IT开发</option>
+                    <option>财税服务</option>
+                    <option>法律服务</option>
+                    <option>人力资源</option>
+                    <option>其他服务</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>需求描述</label>
+                <textarea placeholder="请详细描述您的需求..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label>预算范围</label>
+                <select required>
+                    <option value="">请选择预算范围</option>
+                    <option>1万以下</option>
+                    <option>1-5万</option>
+                    <option>5-10万</option>
+                    <option>10-20万</option>
+                    <option>20万以上</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>联系方式</label>
+                <input type="tel" placeholder="请输入您的手机号" required>
+            </div>
+            <div class="form-group">
+                <label>公司名称</label>
+                <input type="text" placeholder="请输入公司名称" required>
+            </div>
+            <button type="submit" class="submit-btn">提交需求</button>
+        </form>
+    </div>
+    
+    <!-- 入驻弹窗 -->
+    <div class="modal" id="joinModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 style="margin-bottom: 1rem;">服务商入驻</h2>
+            <p style="margin-bottom: 1.5rem; color: #666;">加入我们，获得更多商业机会！</p>
+            <form onsubmit="submitJoin(event)">
+                <div class="form-group">
+                    <label>公司名称</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>主营服务</label>
+                    <input type="text" placeholder="如：品牌营销、网站开发等" required>
+                </div>
+                <div class="form-group">
+                    <label>联系人</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>联系电话</label>
+                    <input type="tel" required>
+                </div>
+                <button type="submit" class="submit-btn">申请入驻</button>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 帮你找 - 企业服务搜索平台</p>
+    </footer>
+    
+    <script>
+        // 模拟服务商数据
+        const providers = {
+            '营销推广': [
+                { name: '创意营销工作室', service: '品牌策划、营销推广', desc: '专注品牌建设与整合营销，服务过50+知名企业', location: '上海' },
+                { name: '数字营销专家', service: '新媒体运营、SEO优化', desc: '精通各大平台运营，平均ROI提升300%', location: '北京' },
+                { name: '品牌战略咨询', service: '品牌定位、市场调研', desc: '10年品牌咨询经验，助力企业品牌升级', location: '深圳' }
+            ],
+            '设计服务': [
+                { name: '创新设计工作室', service: 'UI/UX设计、品牌设计', desc: '获得多项设计大奖，专注用户体验设计', location: '上海' },
+                { name: '视觉设计团队', service: '平面设计、包装设计', desc: '为200+品牌提供视觉解决方案', location: '广州' },
+                { name: '互动设计公司', service: '网页设计、APP设计', desc: '专注数字产品设计，打造极致体验', location: '杭州' }
+            ],
+            'IT开发': [
+                { name: '全栈开发团队', service: '网站开发、APP开发', desc: '技术实力雄厚，交付准时率98%', location: '北京' },
+                { name: '软件定制专家', service: '企业系统开发、API对接', desc: '专注企业数字化转型解决方案', location: '上海' },
+                { name: '移动开发工作室', service: '小程序开发、H5开发', desc: '快速开发，迭代灵活，性价比高', location: '深圳' }
+            ]
+        };
+        
+        function showSection(section) {
+            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+            document.getElementById('demandForm').style.display = 'none';
+            
+            if (section === 'home') {
+                document.querySelector('.hero').style.display = 'block';
+                document.querySelector('.categories').style.display = 'block';
+            } else if (section === 'providers') {
+                document.getElementById('providers').style.display = 'block';
+                showProviders('营销推广');
+            }
+        }
+        
+        function showProviders(category) {
+            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+            document.getElementById('providers').style.display = 'block';
+            document.getElementById('providerTitle').textContent = category + '服务商';
+            
+            const providerList = document.getElementById('providerList');
+            providerList.innerHTML = '';
+            
+            const categoryProviders = providers[category] || providers['营销推广'];
+            
+            categoryProviders.forEach(provider => {
+                const card = document.createElement('div');
+                card.className = 'provider-card';
+                card.innerHTML = `
+                    <div class="provider-name">${provider.name}</div>
+                    <div class="provider-service">${provider.service}</div>
+                    <div class="provider-desc">${provider.desc}</div>
+                    <div class="provider-footer">
+                        <span class="provider-location">📍 ${provider.location}</span>
+                        <button class="contact-btn" onclick="contactProvider('${provider.name}')">立即咨询</button>
+                    </div>
+                `;
+                providerList.appendChild(card);
+            });
+        }
+        
+        function searchServices() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm) {
+                // 简单的搜索逻辑
+                let found = false;
+                for (let category in providers) {
+                    if (category.includes(searchTerm) || searchTerm.includes(category)) {
+                        showProviders(category);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    showProviders('营销推广');
+                    alert('暂未找到相关服务商，为您展示推荐服务商');
+                }
+            }
+        }
+        
+        function showDemandForm() {
+            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+            document.getElementById('demandForm').style.display = 'block';
+        }
+        
+        function submitDemand(e) {
+            e.preventDefault();
+            alert('需求已提交！我们会尽快为您匹配合适的服务商。');
+            showSection('home');
+        }
+        
+        function showJoinModal() {
+            document.getElementById('joinModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('joinModal').style.display = 'none';
+        }
+        
+        function submitJoin(e) {
+            e.preventDefault();
+            alert('入驻申请已提交！我们会在24小时内与您联系。');
+            closeModal();
+        }
+        
+        function contactProvider(name) {
+            alert(`您正在咨询 ${name}，请登录后查看联系方式。\n\n这是MVP演示版本，实际版本会有完整的沟通功能。`);
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('joinModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
